@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import pro.gsilva.catalogo.model.Musica;
 import pro.gsilva.catalogo.service.CatalogoService;

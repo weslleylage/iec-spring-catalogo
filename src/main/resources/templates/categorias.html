@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset='utf-8'>
+    <title>Catalogo Musical</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+            <span class="navbar-brand mb-0 h1" style="font-weight: bold;"> 
+            <a href="/categorias">Categorias Musicais </a> </span>
+<!--        <a href="/addMusica" class="btn btn-primary" role="button">Adicionar</a>-->
+    </nav>
+</header>
+
+<section>
+    <div class="container" style="width: 60%; padding-bottom: 30px;">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="categoria : ${categorias}">
+                <th scope="row" th:text="${categoria.id}"></th>
+                <td th:text="${categoria.nome}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Categoria navigation" th:if="${categorias.totalPages > 0}">
+            <ul class="pagination">
+                <li th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${(pageNumber==categorias.number + 1 ? 'active page-item': 'page-item')}">
+                    <a class="page-link" th:href="@{/categorias(size=${categorias.size}, page=${pageNumber})}"
+                       th:text=${pageNumber}></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+</body>
+</html>
