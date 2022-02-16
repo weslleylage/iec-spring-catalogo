@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.*;
 import pro.gsilva.catalogo.model.Musica;
 import pro.gsilva.catalogo.service.CatalogoService;
 
@@ -13,10 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -66,7 +63,15 @@ public class CatalogoController {
         musica.setData(LocalDate.now());
         catalogoService.save(musica);
         return new ModelAndView("redirect:/musicas");
-    }    
+    }
+
+    @GetMapping("/musicas/pesquisar")
+    public ModelAndView pesquisar(@RequestParam("titulo") String titulo) {
+        ModelAndView mv = new ModelAndView("musicas");
+        List<Musica> musicas = catalogoService.findByTitulo(titulo);
+        mv.addObject("musicas", musicas);
+        return mv;
+    }
     
     @RequestMapping(value="/delMusica/{id}", method=RequestMethod.GET)
     public String delMusica(@PathVariable("id") long id) {

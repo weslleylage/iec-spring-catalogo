@@ -35,5 +35,11 @@ public class CatalogoServiceImpl implements CatalogoService {
     public void excluir(long id) {
         catalogoRepository.deleteById(id);
     }
-    
+
+    @Override
+    public List<Musica> findByTitulo(String titulo) {
+        String tituloLike = titulo + "%";
+        return catalogoRepository.findAllByTituloIsLike(tituloLike);
+    }
+
 }
