@@ -42,6 +42,14 @@ public class CatalogoController {
         return mv;
     }
 
+    @RequestMapping(value = "/musicas/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView getFormEdit(@PathVariable("id") long id) {
+        ModelAndView mv = new ModelAndView("musicaForm");
+        Musica musica = catalogoService.findById(id);
+        mv.addObject("musica", musica);
+        return mv;
+    }
+
     @RequestMapping(value="/addMusica", method=RequestMethod.GET)
     public String getMusicaForm(Musica musica) {
         return "musicaForm";
