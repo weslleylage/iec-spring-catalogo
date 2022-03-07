@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset='utf-8'>
-    <title>Catalogo Musical</title>
+    <title>Cat&aacute;logo Musical</title>
     <th:block th:include="fragments/geral.html :: headerfiles">
     </th:block>
 </head>
@@ -11,18 +11,28 @@
 
 <section>
     <div class="container" style="width: 60%; padding-bottom: 30px;">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nome</th>
-            </tr>
+        <table class="table table-striped table-bordered table-sm">
+            <caption>Lista de categorias</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col" colspan="2">A&ccedil;&otilde;es</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="categoria : ${categorias}">
-                <th scope="row" th:text="${categoria.id}"></th>
-                <td th:text="${categoria.nome}"></td>
-            </tr>
+                <tr th:each="categoria : ${categorias}">
+                    <th scope="row" th:text="${categoria.id}"></th>
+                    <td th:text="${categoria.nome}"></td>
+                    <td>
+                        <div class="col-sm-6">
+                            <a th:href="${(#mvc.url('CC#getFormCategoriaEdit').arg(0, categoria.id)).build()}"
+                            class="btn btn-primary btn-sm active float-left " role="button" aria-pressed="true">Editar</a>
+                            <a th:href="@{/delCategoria/{id}(id=${categoria.id})}" class="btn btn-danger btn-sm float-right"
+                            role="button">Remover</a>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -35,6 +45,9 @@
                 </li>
             </ul>
         </nav>
+        <br />
+        <a th:href="@{/addCategoria}" class="btn btn-primary btn-sm" role="button">Adicionar Categoria</a>
+        <a th:href="@{/musicas}" class="btn btn-outline-primary btn-sm" role="button">Ir para M&uacute;sicas</a>
     </div>
 </section>
 

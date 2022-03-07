@@ -11,36 +11,43 @@
     <div class="container" style="width: 60%; padding-bottom: 30px;">
         <nav class="navbar navbar-light bg-light">
             <form class="form-inline" th:action="@{/musicas/pesquisar}" method="GET">
-                <input class="form-control mr-sm-2" type="search" name="titulo" placeholder="Titulo"
+                <input class="form-control mr-sm-2" type="search" name="titulo" placeholder="Pesquisa por titulo"
                        aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Procurar</button>
+                <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Procurar</button>
             </form>
-
-            <a th:href="@{/addMusica}" class="btn btn-primary" role="button">Adicionar</a>
+            <form class="form-inline" th:action="@{/musicas/pesquisarPorCategoria}" method="GET">
+                <div class="form-group">
+                	<select name="categoria" class="form-control mr-sm-2">
+                        <option value="">Selecione uma categoria para pesquisar...</option>
+					    <option th:each="categoria : ${categorias}" th:text="${categoria.nome}" th:value="${categoria.id}"></option>
+					</select>
+                </div>
+                <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Procurar</button>
+            </form>
+            <a th:href="@{/addMusica}" class="btn btn-primary btn-sm" role="button">Adicionar</a>
         </nav>
         <div class="card" style="margin-top: 20px;" th:each="musica : ${musicas}">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <p class="card-subtitle mb-2 text-muted">
                             <span th:text="${musica.autor}"></span> |
                             <span th:text="${musica.data}"></span>
                         </p>
                     </div>
-                    <div class="col-sm-4">
-                        <a th:href="@{/delMusica/{id}(id=${musica.id})}" class="btn btn-danger float-right"
-                           role="button">Remover</a>
-                        <a th:href="${(#mvc.url('CC#getFormEdit').arg(0, musica.id)).build()}"
-                           class="btn btn-primary active float-right " role="button" aria-pressed="true">Editar</a>
-
+                    <div class="col-sm-1">
+                        <a th:href="${(#mvc.url('CC#getFormEdit').arg(0, musica.id)).build()}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Editar</a>
+                    </div>
+                    <div class="col-sm-1">
+                        <a th:href="@{/delMusica/{id}(id=${musica.id})}" class="btn btn-danger btn-sm" role="button">Remover</a>
                     </div>
                 </div>
-
-
-                <a th:href="${(#mvc.url('CC#getMusicaDetalhes').arg(0, musica.id)).build()}"><h4 class="card-title"
-                                                                                                 style="font-weight: bold; color: black; padding-top: 5px;">
-                    <span th:text="${musica.titulo}"></span></h4></a>
-                <span th:utext="${musica.titulo}"> </span> </h4> </a>
+                <a th:href="${(#mvc.url('CC#getMusicaDetalhes').arg(0, musica.id)).build()}">
+                    <h4 class="card-title" style="font-weight: bold; color: black; padding-top: 5px;">
+                        <span th:text="${musica.titulo}"></span>
+                    </h4>
+                </a>
+                <h6>Categoria: <span th:utext="${musica.categoria.nome}"> </span> </h6> </a>
 
                 <p class="card-text"><span th:utext="${#strings.abbreviate(musica.letra,200)}"> </span></p>
             </div>

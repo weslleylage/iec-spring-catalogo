@@ -35,14 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.inMemoryAuthentication()
-                .withUser("giovanni")
-                .password(encoder.encode("1234"))
+                .withUser("pucminas")
+                .password(encoder.encode("pucminas"))
                 .roles("ADMIN");
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception{
         web.ignoring().antMatchers("/bootstrap/**");
-//        web.ignoring().antMatchers("/bootstrap/**", "/style/**");
+        // web.ignoring().antMatchers("/bootstrap/**", "/style/**");
     }
 }

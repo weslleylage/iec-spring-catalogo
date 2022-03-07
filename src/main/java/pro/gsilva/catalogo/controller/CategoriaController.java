@@ -1,29 +1,37 @@
 package pro.gsilva.catalogo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import pro.gsilva.catalogo.model.Categoria;
-import pro.gsilva.catalogo.service.CategoriaService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import pro.gsilva.catalogo.model.Categoria;
+import pro.gsilva.catalogo.service.CategoriaService;
+
 @Controller
 public class CategoriaController {
+	private static final String CATEGORIA_FORM = "categoriaForm";
+
     @Autowired
     private CategoriaService categoriaService;
 
     @RequestMapping(value="/categorias", method= RequestMethod.GET)
-//    @PreAuthorize("hasRole('ROLE_USER')")
+    // @PreAuthorize("hasRole('ROLE_USER')")
     public ModelAndView getCategorias(@RequestParam("page") Optional<Integer> page,
                                       @RequestParam("size") Optional<Integer> size) {
 
@@ -43,5 +51,35 @@ public class CategoriaController {
         }
 
         return mv;
+    }
+    
+    @RequestMapping(value="/addCategoria", method=RequestMethod.POST)
+    public ModelAndView salvarCategoria(@Valid @ModelAttribute("categoria") Categoria categoria, 
+           BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return new ModelAndView(CATEGORIA_FORM);
+        }
+        categoria.setNome(categoria.getNome());
+        categoriaService.save(categoria);
+        return new ModelAndView("redirect:/categorias");
+    }
+    
+    @RequestMapping(value="/addCategoria", method=RequestMethod.GET)
+    public String getCategoriaForm(Categoria categoria) {
+        return CATEGORIA_FORM;
+    }
+    
+    @RequestMapping(value = "/categorias/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView getFormCategoriaEdit(@PathVariable("id") long id) {
+        ModelAndView mv = new ModelAndView(CATEGORIA_FORM);
+        Categoria categoria = categoriaService.findById(id);
+        mv.addObject("categoria", categoria);
+        return mv;
+    }
+    
+    @RequestMapping(value="/delCategoria/{id}", method=RequestMethod.GET)
+    public String delMusica(@PathVariable("id") long id) {
+        categoriaService.excluir(id);
+        return "redirect:/categorias";
     }
 }

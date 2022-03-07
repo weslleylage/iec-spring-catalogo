@@ -15,7 +15,6 @@ public class CatalogoServiceImpl implements CatalogoService {
     @Autowired 
     private CatalogoRepository catalogoRepository;
 
-
     @Override
     public List<Musica> findAll() {       
         return catalogoRepository.findAll();
@@ -38,8 +37,12 @@ public class CatalogoServiceImpl implements CatalogoService {
 
     @Override
     public List<Musica> findByTitulo(String titulo) {
-        String tituloLike = titulo + "%";
+        String tituloLike = "%" + titulo + "%";
         return catalogoRepository.findAllByTituloIsLike(tituloLike);
     }
 
+    @Override
+    public List<Musica> findByCategoria(Integer categoria) {
+        return catalogoRepository.findAllByCategoriaId(categoria);
+    }
 }
