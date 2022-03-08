@@ -75,7 +75,10 @@ public class CatalogoController {
     public ModelAndView salvarMusica(@Valid @ModelAttribute("musica") Musica musica, 
            BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return new ModelAndView(MUSICA_FORM);
+            ModelAndView mv = new ModelAndView(MUSICA_FORM);
+            List<Categoria> categorias = categoriaService.findAll();
+    	    mv.addObject("categorias", categorias);
+            return mv; 
         }
         musica.setData(LocalDate.now());
         catalogoService.save(musica);
